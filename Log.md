@@ -14,3 +14,7 @@
 * Created api layer of application in BookController
   * Can now view all existing books in book list
   * Can now view specific books ids
+  * Can now input new books to the list (no frontend, used postman)
+* Error with put requests, cannot change information inside book objects
+  * After about 30 mins, found that error was that the server was not restarted so postman did not recognise the put method
+* 
