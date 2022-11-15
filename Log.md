@@ -13,3 +13,4 @@
 * Created service layer of application in BookService
 * Created api layer of application in BookController
   * Can now view all existing books in book list
+  * Can now view specific books ids
