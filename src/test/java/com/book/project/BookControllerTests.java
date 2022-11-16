@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -52,7 +49,6 @@ public class BookControllerTests {
 
         when(bookRepository.findById(id)).thenReturn(Optional.of(book));
         mockMvc.perform(get("/api/books/{id}", id)).andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.title").value(book.getTitle()))
                 .andExpect(jsonPath("$.author").value(book.getAuthor()))
                 .andExpect(jsonPath("$.description").value(book.getDescription()))
@@ -83,47 +79,6 @@ public class BookControllerTests {
                 .andExpect(jsonPath("$.size()").value(books.size()))
                 .andDo(print());
     }
-
-//    @Test
-//    void shouldReturnListOfBooksWithFilter() throws Exception {
-//        List<Book> books = new ArrayList<>(
-//                Arrays.asList(new Book("Testbook1", "Spring Boot @WebMvcTest", "Description 1", true),
-//                        new Book("Testbook3", "Spring Boot Web MVC", "Description 3", true)));
-//
-//        String title = "Boot";
-//        MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
-//        paramsMap.add("title", title);
-//
-//        when(bookRepository.findBookByTitle(title)).thenReturn(books);
-////        when(bookRepository.findBookByTitle(title));
-//        mockMvc.perform(get("/api/books").params(paramsMap))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.size()").value(books.size()))
-//                .andDo(print());
-//
-//        books = Collections.emptyList();
-//
-//        when(bookRepository.findBookByTitle(title)).thenReturn(books);
-////        when(bookRepository.findBookByTitle(title));
-//        mockMvc.perform(get("/api/books").params(paramsMap))
-//                .andExpect(status().isNoContent())
-//                .andDo(print());
-//    }
-
-//    @Test
-//    void shouldReturnNoContentWhenFilter() throws Exception {
-//        String title = "readingList";
-//        MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
-//        paramsMap.add("title", title);
-//
-//        List<Book> books = Collections.emptyList();
-//
-//        when(bookRepository.findBookByTitle(title)).thenReturn(books);
-////        when(bookRepository.findBookByTitle(title));
-//        mockMvc.perform(get("/api/books").params(paramsMap))
-//                .andExpect(status().isNoContent())
-//                .andDo(print());
-//    }
 
     @Test
     void shouldUpdateBook() throws Exception {
@@ -169,12 +124,4 @@ public class BookControllerTests {
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
-
-//    @Test
-//    void shouldDeleteAllBooks() throws Exception {
-//        doNothing().when(bookRepository).deleteAll();
-//        mockMvc.perform(delete("/api/books"))
-//                .andExpect(status().isNoContent())
-//                .andDo(print());
-//    }
 }
