@@ -1,6 +1,7 @@
 package com.book.project;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -28,7 +30,7 @@ public class BookController {
     @Autowired
     BookRepository bookRepository;
 
-    private final BookService bookService;
+//    private final BookService bookService;
 
     @GetMapping("/books")
 //    public List<Book> fetchAllBooks(){
@@ -39,6 +41,10 @@ public class BookController {
 
             if(title == null)
                 books.addAll(bookRepository.findAll());
+//            if (title == null)
+//                bookRepository.findAll().forEach(books::add);
+//            else
+//                bookRepository.findBookByTitle(title).forEach(books::add);
 
             if(books.isEmpty()){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -53,11 +59,9 @@ public class BookController {
     public ResponseEntity<Book> getBookById(@PathVariable("id") String id){
         Optional<Book> bookData = bookRepository.findById(id);
 
-        if (bookData.isPresent()) {
-            return new ResponseEntity<>(bookData.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return bookData.map(
+                book -> new ResponseEntity<>(book, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)
+        );
     }
 
     @PostMapping("/books")
