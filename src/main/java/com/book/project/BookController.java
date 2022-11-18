@@ -2,6 +2,7 @@ package com.book.project;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
@@ -50,7 +51,8 @@ public class BookController {
         Optional<Book> bookData = bookRepository.findById(id);
 
         return bookData.map(
-                book -> new ResponseEntity<>(book, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)
+                book -> new ResponseEntity<>(book, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND)
         );
     }
 
@@ -59,7 +61,12 @@ public class BookController {
         try {
             Book _book = bookRepository
                     .save(new Book(book.getTitle(), book.getAuthor(), book.getDescription(), book.isRead()));
-            return new ResponseEntity<>(_book, HttpStatus.CREATED);
+            if(Objects.equals(_book.getTitle(), book.getTitle())
+                && Objects.equals(_book.getAuthor(), book.getAuthor())) {
+                return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+            } else {
+                return new ResponseEntity<>(_book, HttpStatus.CREATED);
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
